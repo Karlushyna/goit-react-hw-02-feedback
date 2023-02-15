@@ -12,21 +12,34 @@ export class App extends Component {
   };
 
 
-  handleFeedback = e => {
-    if (e === "Good") {
-      this.setState({ good: this.state.good + 1 });
-    } else if (e === "Neutral") {
-      this.setState({ neutral: this.state.neutral + 1 });
-    } else if (e === "Bad") {
-      this.setState({ bad: this.state.bad + 1 });
-    }
-  };
-
-  countTotalFeedback = () => {
+    countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
     let total = good + neutral + bad;
     return total;
+    };
+  
+  
+  //prev
+  // handleFeedback = e => {
+  //   if (e === "Good") {
+  //     this.setState({ good: this.state.good + 1 });
+  //   } else if (e === "Neutral") {
+  //     this.setState({ neutral: this.state.neutral + 1 });
+  //   } else if (e === "Bad") {
+  //     this.setState({ bad: this.state.bad + 1 });
+  //   }
+  // };
+
+
+  //new
+    handleFeedback = (option) => {
+      this.setState((prevState) => {
+        return {
+          [option]: prevState[option] + 1,
+        }
+        })
   };
+
 
   countPositiveFeedbackPercentage = () => {
     if (this.countTotalFeedback() === 0) {
@@ -36,6 +49,7 @@ export class App extends Component {
   };
   
   render() {
+    const { good, neutral, bad } = this.state;
     return (
       <div
         style={{
@@ -50,16 +64,16 @@ export class App extends Component {
       >
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={['Good', 'Neutral', 'Bad']}
+            options={['good', 'neutral', 'bad']}
             onLeaveFeedback={this.handleFeedback}
           />{' '}
         </Section>
         <Section title="Statistics">
           {this.countTotalFeedback() !== 0 ? (
           <Statistics
-          good = {this.state.good}
-          neutral = {this.state.neutral}
-          bad = {this.state.bad}
+          good = {good}
+          neutral = {neutral}
+          bad = {bad}
           total = {this.countTotalFeedback()}
           countPositiveFeedbackPercentage={this.countPositiveFeedbackPercentage()}
           />
